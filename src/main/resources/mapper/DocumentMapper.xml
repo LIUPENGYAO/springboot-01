@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace：必须和对应的dao接口的全名相同-->
+<mapper namespace="com.qfedu.dao.DocumentDao">
+	<!--映射ResultSet中的一行数据到一个Java对象-->
+	<resultMap type="com.qfedu.pojo.Document" id="DocumentResultMap">
+		<id  property="id" column="id" />
+		<result property="docname" column="docname" />
+
+		<result property="memo" column="memo" />
+
+		<result property="upname" column="upname" />
+
+		<result property="uptime" column="uptime" />
+
+		<result property="doctype" column="doctype" />
+	</resultMap>
+	<!--配置一个sql片段，在select的sql语句中引用-->
+	<sql id="documentColumns">
+		${alias}.id,${alias}.docname,${alias}.memo,${alias}.upname,${alias}.uptime,${alias}.doctype
+	</sql>
+
+<!--	<sql id="sampleCountColumns">
+		${alias}.sample_id
+	</sql>-->
+	<!--addDocument，id必须和dao接口中的方法名称一致-->
+	<insert id="addDocument" >
+		<selectKey order="AFTER" keyProperty="id" resultType="int">
+			select last_insert_id()
+		</selectKey>
+		insert into document (docname,memo,upname,uptime,doctype) values (#{docname},#{memo},#{upname},#{uptime},#{doctype})
+	</insert>
+
+	<update id="updateDocumentById">
+		update document set docname=#{docname},memo=#{memo},upname=#{upname},uptime=#{uptime},doctype=#{doctype} where id = #{id}
+	</update>
+
+	<delete id="batchDel">
+		delete from document where id in
+	<!--	<where>-->
+			<foreach collection="array" index="index" item="id"
+					 open="(" separator="," close=")">
+				#{id}
+			</foreach>
+	<!--	</where>-->
+	</delete>
+
+	<delete id="deleteDocumentById">
+		delete from document where id=#{id}
+	</delete>
+
+	<select id="getDocumentById" resultMap="DocumentResultMap">
+		select
+		<include refid="documentColumns">
+			<property name="alias" value="t" />
+		</include>
+		from document t
+		where t.id= #{id}
+	</select>
+
+	<select id="findDocumentList" resultMap="DocumentResultMap">
+		select
+		<include refid="documentColumns">
+			<property name="alias" value="t" />
+		</include>
+		from document t
+		<where>
+			<if test="docname != null">
+				docname=#{docname}
+			</if>
+			<if test="upname != null">
+				and upname=#{upname}    <!--写or就是or-->
+			</if>
+		</where>
+
+	</select>
+	<!--select：定义select-->
+	<!--注意：加入order by,page、pagecount使用的查询条件一致-->
+	<select id="page" resultMap="DocumentResultMap">
+		select
+		<include refid="documentColumns">
+			<property name="alias" value="t" />
+		</include>
+		from document t
+		<where>
+			<if test="docname != null and docname !='' ">
+				<bind name="sname" value="'%'+docname+'%'"/>
+				docname like #{sname}
+			</if>
+			<if test="upname != null and upname !=''">
+				<bind name="tname" value="'%'+upname+'%'"/>
+				and upname like #{tname}
+			</if>
+			<if test="doctype != null and doctype !=''">
+				<bind name="dname" value="'%'+doctype+'%'"/>
+				and doctype like #{dname}
+			</if>
+		</where>
+		order by t.id desc
+		<include refid="pagger.pagger"></include>
+
+	</select>
+
+	<select id="pageCount" resultType="int">
+		select
+		count(1)
+		from document t
+		<where>
+			<if test="docname != null and docname !='' ">
+				<bind name="sname" value="'%'+docname+'%'"/>
+				docname like #{sname}
+			</if>
+			<if test="upname != null and upname !=''">
+				<bind name="tname" value="'%'+upname+'%'"/>
+				and upname like #{tname}
+			</if>
+			<if test="doctype != null and doctype !=''">
+				<bind name="dname" value="'%'+doctype+'%'"/>
+				and doctype like #{dname}
+			</if>
+		</where>
+	</select>
+</mapper>

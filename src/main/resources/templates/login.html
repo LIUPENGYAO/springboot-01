@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <!--
+        Bootstrap 不支持 IE 古老的兼容模式。为了让 IE 浏览器运行最新的渲染模式下，建议将此 <meta> 标签加入到页面中：
+    -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--
+        --initial-scale=1：初始大小比例
+        --maximum-scale=1: 可以放大的比例。
+        --user-scalable=no: 禁止用户手动放大或缩小网页。
+    -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>Bootstrap 模板</title>
+
+    <!-- Bootstrap -->
+    <link th:href="@{/css/bootstrap.css}" rel="stylesheet" type="text/css">
+
+
+</head>
+<body>
+
+
+<div class="modal-dialog  modal-sm" style="margin-top: 10%;">
+    <form th:action="@{/user/login}" method="post"> <!--/user/login如果写成这样则url前边不会加springboot-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title text-center" id="myModalLabel">登录</h4>
+            </div>
+            <div class="modal-body" id="model-body">
+                <div class="form-group">
+
+                    <input type="text" class="form-control" placeholder="用户名" name="userName" autocomplete="off"><font color="red" th:text="${msg}"></font><br>
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" placeholder="密码" name="password" autocomplete="off"> <br>
+
+                </div>
+                <div class="form-group">
+                    <input type="checkbox" name="rememberMe">记住我 <br>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary form-control">登录</button>
+                </div>
+           <!--     <div class="form-group">
+                    <a href="${pageContext.request.contextPath}/user/showRegister"><button type="button" class="btn btn-default form-control">注册</button></a>
+                </div>-->
+
+            </div>
+        </div><!-- /.modal-content -->
+    </form>
+</div><!-- /.modal -->
+
+</body>
+</html>

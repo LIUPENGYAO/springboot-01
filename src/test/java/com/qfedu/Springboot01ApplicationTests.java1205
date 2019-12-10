@@ -1,0 +1,42 @@
+package com.qfedu;
+import com.qfedu.simple.FanoutProducer;
+import com.qfedu.simple.RouteProducer;
+import com.qfedu.simple.SimpleQueueProducer;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class Springboot01ApplicationTests {
+    @Autowired
+    private SimpleQueueProducer simpleQueueProducer;
+
+    @Autowired
+    private FanoutProducer fanoutProducer;
+    @Autowired
+    private RouteProducer routeProducer;
+
+
+    @Test
+    void contextLoads() {
+    }
+
+    @Test
+    public void testSimpleQueueProducer(){
+        simpleQueueProducer.send();
+    }
+
+    @Test
+    public void testFanoutProducer(){
+        fanoutProducer.send();
+    }
+
+    @Test
+    public void testRouteProducer(){
+        routeProducer.send();
+    }
+
+
+
+
+}

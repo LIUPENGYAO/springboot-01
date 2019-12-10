@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.w3.org/1999/xhtml">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<a th:href="@{/user/query}">查询所有用户</a>
+<a th:href="@{/user/add}" shiro:hasPermission="user:add">添加用户</a>
+<a th:href="@{/user/delete}" shiro:hasPermission="user:delete">删除用户</a>
+<a th:href="@{/user/logout}">退出</a>
+</body>
+</html>
